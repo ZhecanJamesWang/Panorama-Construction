@@ -313,14 +313,14 @@ if __name__ == "__main__":
   cv2.imshow('correspondences', correspondences)
   
   ## Find homography between the views.
-  if len(points1) < 4 or len(points2) < 4:
-    print "Not enough features to find a homography"
-    homography = np.identity(3, dtype=float)
-  else:
-    (homography, _) = cv2.findHomography(points2, points1, method=cv2.RANSAC)
-    homography = np.matrix(homography)
-  print "Homography = "
-  print homography
+  # if len(points1) < 4 or len(points2) < 4:
+  #   print "Not enough features to find a homography"
+    # homography = np.identity(3, dtype=float)
+  # else:
+  (homography, _) = cv2.findHomography(points2, points1, method=cv2.RANSAC)
+    # homography = np.matrix(homography)
+  # print "Homography = "
+  # print homography
   
   ## Calculate size and offset of merged panorama.
   (size, offset) = calculate_size(image1.shape[:2], image2.shape[:2], homography)
