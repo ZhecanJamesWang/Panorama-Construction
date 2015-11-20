@@ -22,9 +22,10 @@ Until here, we finally got two images stitched together. Some of the examples ar
 ![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/blogpic1.jpg)
 [Figure 1: First of two images we’ll stitch together]
 
-
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/blogpic2.jpg)
 [Figure 2: Second of two images we’ll stitch together]
 
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/blogpic3.jpg)
 [Figure 3: The two images stitched together]
 
 As in the photo, the photo are merged well. 
@@ -36,14 +37,16 @@ The first one we tried was to stitch the first two images then stitch the new im
 
 The second method we tried was to stitch every two images then from that new group of images stitch every two and so on until we would compile to one single image [see Figure 5]. 
 
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/blogpic4.jpg)
 [Figure 4: First Method of Image Stitching]
 
-
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/blogpic5.jpg)
 [Figure 5: Second Method of Image Stitching]
 
-
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/blogpic6.jpg)
 [Figure 6: Multiple stitched images using the first stitching method]
 
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/blogpic7.jpg)
 [Figure 7: Multiple stitched images using the second stitching method]
 
 As the photos above, from both methods, the because of the homography transfer, as the images get stitched more and more, the output images will get more and more skewed in a nonuniform way. This problem will make the match algorithm unable to detect corresponding matches anymore since the photos are getting more unscaled. Each iteration would magnify any errors in the compiling of the image and would create large black lines in the middle of the images. Additionally the panorama would increase in size as it stitched pictures.
