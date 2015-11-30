@@ -345,11 +345,12 @@ class ImageStiching(object):
     self.preFileNumber = self.fileNumber
     if self.fileNumber%self.patchNumber != 0:
       raise Exception("The number of files cannot divided evenly by patchNumber")
-    for i in range (int(self.fileNumber/self.patchNumber)):
-        for j in range (i*5, int(((i+1)*5)/2)):
+    for i in range (int(self.preFileNumber/self.patchNumber)):
+        for j in range (i*self.patchNumber, int(((i+1)*self.patchNumber)/2)):
           self.mergeTwoImages(j+1,"left")
-        for j in range (i*5, int(((i+1)*5)/2)):
-          self.mergeTwoImages(self.fileNumber - (j+1), "right")
+        for j in range (i*self.patchNumber, int(((i+1)*self.patchNumber)/2)):
+          print "j", j
+          self.mergeTwoImages(self.preFileNumber - (j+1), "right")
         self.mergeTwoImages(self.preFileNumber+1, "right")
 
 if __name__ == "__main__":
