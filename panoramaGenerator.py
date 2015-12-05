@@ -8,7 +8,7 @@ class ImageStitching(object):
   def __init__(self, imagePaths, patchNumber = 5):
     self.fileNumber = 0
     self.DEBUG = False
-    self.DEBUG1 = False
+    self.DEBUG1 = True
     self.patchNumber = patchNumber
     self.working_images = [cv2.imread(imagePath) for imagePath in imagePaths]
     # allocate some extra array indices
@@ -254,8 +254,9 @@ class ImageStitching(object):
     ## Load images.
     self.heading = heading
     self.imageIndex = imageIndex
-    print imageIndex
-    print imageIndex+1
+    if self.DEBUG1:
+      print imageIndex
+      print imageIndex+1
     image1 = self.working_images[imageIndex]
     image2 = self.working_images[imageIndex+1]
     if self.heading == "left":
@@ -269,9 +270,9 @@ class ImageStitching(object):
     ## Detect features and compute descriptors.
     keypoints1, descriptors1 = self.extract_features_and_descriptors(image1)
     keypoints2, descriptors2 = self.extract_features_and_descriptors(image2)
-    if self.DEBUG1:
-      print len(keypoints1), "features detected in image1"
-      print len(keypoints2), "features detected in image2"
+    # if self.DEBUG1:
+      # print len(keypoints1), "features detected in image1"
+      # print len(keypoints2), "features detected in image2"
     
     # show("Image1 features", cv2.drawKeypoints(image1, keypoints1, color=(0,0,255)))
     # show("Image2 features", cv2.drawKeypoints(image2, keypoints2, color=(0,0,255)))
@@ -280,8 +281,8 @@ class ImageStitching(object):
     points1, points2 = self.find_correspondences(keypoints1, descriptors1, keypoints2, descriptors2)
     points1 = np.array(points1, dtype=float)
     points2 = np.array(points2, dtype=float)
-    if self.DEBUG1:
-      print len(points1), "features matched"
+    # if self.DEBUG1:
+    #   print len(points1), "features matched"
 
     ## Visualise corresponding features.
     correspondences = self.draw_correspondences(image1, image2, points1, points2)
@@ -304,46 +305,44 @@ class ImageStitching(object):
 
     size = tuple(np.asarray(size).flatten().astype(int).tolist())
     offset = tuple(np.asarray(offset).flatten().astype(int).tolist())
-    if self.DEBUG1:
+    if self.DEBUG:
       print "image1, ", image1.shape[:2], "image2: ", image2.shape[:2]
       print "output size: %ix%i" % size
     ## Finally combine images into a panorama.
     panorama = self.merge_images(image1, image2, homography, size, offset, (points1, points2))
     # cv2.imwrite(self.folderName+"/"+self.fileName+str(self.fileNumber+1)+".jpg", panorama)
     
-
-    # panorama = cv2.cvtColor(panorama,cv2.COLOR_BGR2RGB)
-    # panorama = Image.fromarray(panorama)
-    print "heading", self.heading
-    # print imageIndex
+    if self.DEBUG1:
+      print "heading", self.heading
+      print imageIndex
     self.fileNumber = self.calculateFilesNumber()
     if self.heading == "left":
-      print "blah ", self.preFileNumber/2
-      print "imageIndex: ", imageIndex
+      if self.DEBUG1:
+        print "blah ", self.preFileNumber/2
+        print "imageIndex: ", imageIndex
       if imageIndex + 1 == int((self.preFileNumber)/2):
         i = self.fileNumber
         self.working_images[i] = panorama
-        print("savefileNumber%d"%(i))
+        if self.DEBUG1:
+          print("savefileNumber%d"%(i))
       else:
         i = self.imageIndex+1
         self.working_images[i] = panorama
-        print("saveimageIndex%d"%(i))
+        if self.DEBUG1:
+          print("saveimageIndex%d"%(i))
     else:
       if imageIndex== int(self.preFileNumber/2):
-        # i = self.fileNumber
-        # self.working_images[i] = panorama
-        # print("savefileNumber%d"%(i))
         self.working_images[self.fileNumber] = panorama
-        print("savefileNumber%d"%(self.fileNumber))
-        # self.saveImage(panorama, self.fileNumber+1)
+        if self.DEBUG1:
+          print("savefileNumber%d"%(self.fileNumber))
       elif imageIndex + 1 > self.preFileNumber:
         self.working_images[self.fileNumber] = panorama
-        print("savefileNumber_1_%d"%(self.fileNumber))
-        # self.saveImage(panorama, self.fileNumber+1)
+        if self.DEBUG1:
+          print("savefileNumber_1_%d"%(self.fileNumber))
       else:
         self.working_images[self.imageIndex] = panorama
-        print("saveimageIndex%d"%(self.imageIndex))
-        # self.saveImage(panorama, self.imageIndex)
+        if self.DEBUG1:
+          print("saveimageIndex%d"%(self.imageIndex))
         
   def saveImage(self, panorama, imageNumber):
     panorama.save(self.folderName+"/"+self.fileName+str(imageNumber),'JPEG')
@@ -364,15 +363,15 @@ class ImageStitching(object):
       raise Exception("The number of files cannot divided evenly by patchNumber")
     for i in range (int(self.preFileNumber/self.patchNumber)):
         end = int(((i+1)*self.patchNumber)/2)
-        print "end ", end
         for j in range (i*self.patchNumber, end):
           self.mergeTwoImages(j,"left")
-          print 'james '
         for j in range (i*self.patchNumber, end):
-          print "ryan"
           self.mergeTwoImages(self.preFileNumber - (j+2), "right")
         self.mergeTwoImages(self.preFileNumber, "right")
-    return self.working_images[self.calculateFilesNumber() - 1]
+    panorama = self.working_images[self.calculateFilesNumber() - 1]
+    # panorama = cv2.cvtColor(panorama,cv2.COLOR_BGR2RGB)
+    # panorama = Image.fromarray(panorama)
+    return panorama
 
 if __name__ == "__main__":
   imageStiching = ImageStiching(imagePaths)  

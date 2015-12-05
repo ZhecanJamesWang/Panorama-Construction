@@ -8,20 +8,20 @@
 # warped considerably)
 
 # Test cases
-# python stitch.py Image1.jpg Image2.jpg -a SIFT
-# python stitch.py Image2.jpg Image1.jpg -a SIFT
+# python stitch.py Image1.jpeg Image2.jpeg -a SIFT
+# python stitch.py Image2.jpeg Image1.jpeg -a SIFT
 # python stitch.py ../stitcher/images/image_5.png ../stitcher/images/image_6.png -a SIFT
 # python stitch.py ../stitcher/images/image_6.png ../stitcher/images/image_5.png -a SIFT
-# python stitch.py ../vashon/01.JPG ../vashon/02.JPG -a SIFT
-# python stitch.py panorama_vashon2.jpg ../vashon/04.JPG -a SIFT
-# python stitch.py ../books/02.JPG ../books/03.JPG -a SIFT
+# python stitch.py ../vashon/01.jpeg ../vashon/02.jpeg -a SIFT
+# python stitch.py panorama_vashon2.jpeg ../vashon/04.jpeg -a SIFT
+# python stitch.py ../books/02.jpeg ../books/03.jpeg -a SIFT
 
 # coding: utf-8
 import cv2, numpy as np
 import math
 import argparse as ap
 
-DEBUG = False
+DEBUG = True
 
 ## 1. Extract SURF keypoints and descriptors from an image. [4] ----------
 def extract_features(image, surfThreshold=1000, algorithm='SURF'):
@@ -30,7 +30,7 @@ def extract_features(image, surfThreshold=1000, algorithm='SURF'):
   image_gs = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
   
   if DEBUG:
-      cv2.imwrite("out/gray.jpg", image_gs)
+      cv2.imwrite("out/gray.jpeg", image_gs)
   
   # Detect SURF features and compute descriptors.
   detector = cv2.FeatureDetector_create(algorithm) # what happens with SIFT?
@@ -154,7 +154,8 @@ def merge_images(image1, image2, homography, size, offset, keypoints):
   # print homography
   
   # draw the transformed image2
-  cv2.warpPerspective(image2, homography, size, panorama)
+  cv2.imshow("warped",cv2.warpPerspective(image2, homography, size, panorama))
+  cv2.waitKey(0)
   
   panorama[oy:h1+oy, ox:ox+w1] = image1  
   # panorama[:h1, :w1] = image1  
@@ -234,8 +235,10 @@ if __name__ == "__main__":
   args = parser.parse_args()
   
   ## Load images.
-  image1 = cv2.imread("input/Image1.jpg")
-  image2 = cv2.imread("input/Image2.jpg")
+  image1 = cv2.imread("image13")
+  image2 = cv2.imread("image14")
+  print image1.shape
+  print image2.shape
 
   ## Detect features and compute descriptors.
   (keypoints1, descriptors1) = extract_features(image1, algorithm=args.algorithm)
@@ -249,8 +252,8 @@ if __name__ == "__main__":
   
   ## Visualise corresponding features.
   correspondences = draw_correspondences(image1, image2, points1, points2)
-  cv2.imwrite("out/correspondences.jpg", correspondences)
-  print 'Wrote correspondences.jpg'
+  cv2.imwrite("correspondences.jpeg", correspondences)
+  print 'Wrote correspondences.jpeg'
   
   ## Find homography between the views.
   (homography, _) = cv2.findHomography(points2, points1)
@@ -261,9 +264,9 @@ if __name__ == "__main__":
   
   ## Finally combine images into a panorama.
   panorama = merge_images(image1, image2, homography, size, offset, (points1, points2))
-  cv2.imwrite("out/panorama.jpg", panorama)
-  cv2.imshow("panorama.jpg", panorama)
+  cv2.imwrite("panorama3.jpeg", panorama)
+  # cv2.imshow("panorama.jpeg", panorama)
   while True:
     if cv2.waitKey(0) != -1:
       break
-  print 'Wrote panorama.jpg'
+  print 'Wrote panorama.jpeg'

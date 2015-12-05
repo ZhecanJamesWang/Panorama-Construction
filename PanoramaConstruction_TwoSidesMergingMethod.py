@@ -5,13 +5,13 @@ import Image
 
 class ImageStiching(object):
   """Stiching multiple images together"""
-  def __init__(self, folderName, fileName):
+  def __init__(self, folderName, fileName, patchNumber):
     self.folderName = folderName
     self.fileName = fileName
     self.fileNumber = 0
     self.DEBUG = False
     self.DEBUG1 = False
-    self.patchNumber = 5
+    self.patchNumber = patchNumber
     
     
   def extract_features_and_descriptors(self, image):
@@ -315,23 +315,21 @@ class ImageStiching(object):
     self.fileNumber = self.calculateFilesNumber()
     if self.heading == "left":
       if imageIndex == int(self.preFileNumber/2):
-        panorama.save(self.folderName+"/"+self.fileName+str(self.fileNumber+1),'JPEG')
-        print "output_save:", self.folderName+"/"+self.fileName+str(self.fileNumber+1)
+        # os.path.join(self.folderName,"{name}{number}".format(name=self.fileName, number=self.fileNumber+1), 'JPEG')
+        self.saveImage(panorama, self.fileNumber+1)
       else:
-        panorama.save(self.folderName+"/"+self.fileName+str(self.imageIndex+1),'JPEG')
-        print "output_save:", self.folderName+"/"+self.fileName+str(self.imageIndex+1)
+        self.saveImage(panorama, self.imageIndex+1)
     else:
       if imageIndex == int(self.preFileNumber/2)+1:
-        self.fileNumber = self.calculateFilesNumber()
-        panorama.save(self.folderName+"/"+self.fileName+str(self.fileNumber+1),'JPEG')
-        print "output_save:", self.folderName+"/"+self.fileName+str(self.fileNumber+1)
+        self.saveImage(panorama, self.fileNumber+1)
       elif imageIndex > self.preFileNumber:
-        panorama.save(self.folderName+"/"+self.fileName+str(self.fileNumber+1),'JPEG')
-        print "output_save:", self.folderName+"/"+self.fileName+str(self.fileNumber+1)
-        print "---"
+        self.saveImage(panorama, self.fileNumber+1)
       else:
-        panorama.save(self.folderName+"/"+self.fileName+str(self.imageIndex),'JPEG')
-        print "output_save:", self.folderName+"/"+self.fileName+str(self.imageIndex)
+        self.saveImage(panorama, self.imageIndex)
+        
+  def saveImage(self, panorama, imageNumber):
+    panorama.save(self.folderName+"/"+self.fileName+str(imageNumber),'JPEG')
+    print "output_save:", self.folderName+"/"+self.fileName+str(imageNumber)
 
   def calculateFilesNumber(self):
     fileNumber = 0
@@ -349,13 +347,12 @@ class ImageStiching(object):
         for j in range (i*self.patchNumber, int(((i+1)*self.patchNumber)/2)):
           self.mergeTwoImages(j+1,"left")
         for j in range (i*self.patchNumber, int(((i+1)*self.patchNumber)/2)):
-          print "j", j
           self.mergeTwoImages(self.preFileNumber - (j+1), "right")
         self.mergeTwoImages(self.preFileNumber+1, "right")
 
 if __name__ == "__main__":
-  folderName = "input14"
-  imageName = "Image"
+  folderName = "input15"
+  imageName = "image"
   imageStiching = ImageStiching(folderName, imageName)  
   imageStiching.run()
 

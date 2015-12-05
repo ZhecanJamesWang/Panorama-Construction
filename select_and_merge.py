@@ -1,7 +1,9 @@
 import os
 import string
 import cv2
+import numpy as np
 from panoramaGenerator import ImageStitching
+
 
 def filename2number(filename):
 	"""
@@ -19,18 +21,29 @@ def number2filename(number):
 def test_number2filename():
 	print number2filename(8) == "8.0.jpg" 
 	print number2filename(100) == "100.0.jpg" 
-# print test_number2filename()
 
+# print test_number2filename()
+def get_center_degree(num_array):
+	return np.mean(num_array) 
+
+def test_get_middle():
+	print "Expected 4: Got ", get_center_degree([0, 2, 4, 6, 8])
+	print "Expected 3: Got ", get_center_degree([0, 2, 4, 6])
+
+test_get_middle()
 class SelectAndMerge(object):
 	"""docstring for ClassName"""
-	def __init__(self):
-		self.raw_path = 'street_view_images/raw'
+	def __init__(self,pose_x,pose_y):
+		self.pose_x = pose_x
+		self.pose_y = pose_y
+		self.raw_path = 'street_view_images/raw/{x},{y}'.format(x=pose_x, y=pose_y)
+		self.save_path = 'street_view_images/final/iter2' # remove hardcoding later
 		self.get_sorted_raw_int()
 		self.indexList = []
 		self.total = len(self.sorted_raw_int)
 		self.diff = 2
 		self.start_offset = 2
-		self.patchNumber = 5	
+		self.patchNumber = 5
 
 	def get_sorted_raw_int(self):
 		self.raw = os.listdir(self.raw_path)
@@ -59,18 +72,19 @@ class SelectAndMerge(object):
 		"""
 		for batch in self.indexList:
 			print batch
-			image_fns = map(number2filename, [self.sorted_raw_int[i] for i in batch])
+
+			batch_numbers = [self.sorted_raw_int[i] for i in batch]
+			image_fns = map(number2filename, batch_numbers)
 			image_paths = [os.path.join(self.raw_path, fn) for fn in image_fns]
+
 			im_st = ImageStitching(image_paths)
-			print map(type, im_st.working_images)
-			panorama = im_st.run()# call panorama stiching algorithm
-			print type(panorama), panorama.shape
-			cv2.imshow('window', panorama)
-			cv2.waitKey(0)
+			panorama = im_st.run() # call panorama stiching algorithm
+			print type(panorama)
+			fn = '{x},{y},{theta}.jpg'\
+				.format(x=self.pose_x, y=self.pose_y, theta=get_center_degree(batch_numbers))
+			cv2.imwrite(os.path.join(self.save_path, fn), panorama)
 
-			break
-
-	def readImageBatch(self, ):
+	def readImageBatch(self):
 		patch_counter = 0
 		patch_number = 0
 		for filename in self.sorted_raw_int:
@@ -78,15 +92,17 @@ class SelectAndMerge(object):
 			print path
 			img = cv2.imread(path)
 
+	def run(self):
+			self.generatePatchBatches()
+			self.feedToStitching()
 
 			# if img != None:	
 			# 	cv2.imshow("test", img)
 	  #       	cv2.waitKey(5)
 	        
-sm = SelectAndMerge()
-sm.generatePatchBatches()
-sm.feedToStitching()
-	# # merge
+sm = SelectAndMerge(2.55,-3.5)
+sm.run()
+# # merge
 # folderName = "street_view_images/working"
 # imageName = "image"
 # patchNumber = 5
