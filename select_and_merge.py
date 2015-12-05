@@ -7,7 +7,7 @@ from panoramaGenerator import ImageStitching
 
 def filename2number(filename):
 	"""
-	example: "8.0.jpg" -> 8.0
+	example: "8.jpg" -> 8
 	"""
 	return int(string.split(filename, '.')[0])
 
@@ -16,11 +16,11 @@ def number2filename(number):
 	example: 8 -> "8.0.jpg"
 	"""
 	# note: making it integer would make it more straightforward
-	return str(number) + ".0.jpg"
+	return str(number) + ".jpg"
 
 def test_number2filename():
-	print number2filename(8) == "8.0.jpg" 
-	print number2filename(100) == "100.0.jpg" 
+	print number2filename(8) == "8.jpg" 
+	print number2filename(100) == "100.jpg" 
 
 # print test_number2filename()
 def get_center_degree(num_array):
@@ -37,11 +37,11 @@ class SelectAndMerge(object):
 		self.pose_x = pose_x
 		self.pose_y = pose_y
 		self.raw_path = 'street_view_images/raw/{x},{y}'.format(x=pose_x, y=pose_y)
-		self.save_path = 'street_view_images/final/iter2' # remove hardcoding later
+		self.save_path = 'street_view_images/final/iter4' # remove hardcoding later
 		self.get_sorted_raw_int()
 		self.indexList = []
 		self.total = len(self.sorted_raw_int)
-		self.diff = 2
+		self.diff = 4
 		self.start_offset = 2
 		self.patchNumber = 5
 
@@ -100,7 +100,7 @@ class SelectAndMerge(object):
 			# 	cv2.imshow("test", img)
 	  #       	cv2.waitKey(5)
 	        
-sm = SelectAndMerge(2.55,-3.5)
+sm = SelectAndMerge(0.0,0.0)
 sm.run()
 # # merge
 # folderName = "street_view_images/working"
