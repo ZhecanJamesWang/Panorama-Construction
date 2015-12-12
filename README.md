@@ -107,6 +107,9 @@ After successfully implementing the panorama image stitching part, we also need 
 
 
 
+## Database
 
+SQLite3 database
 
-
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/Screenshot%20from%202015-12-08%2000:04:16.png)
+[Figure 12: Diagram of Sqlite3 database structure]
