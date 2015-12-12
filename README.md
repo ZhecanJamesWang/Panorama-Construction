@@ -66,3 +66,6 @@ After previously failing many times in image stitching, we planned to start look
 
 ##The New stitching method (two side stitching method)
 Diagram of how method works for 5 images
+![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/Screenshot%20from%202015-12-07%2023:49:24.png)
+[Figure 7: Multiple stitched images using the second stitching method]
+
