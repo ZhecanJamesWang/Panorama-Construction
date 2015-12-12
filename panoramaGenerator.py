@@ -8,7 +8,7 @@ class ImageStitching(object):
   def __init__(self, imagePaths, patchNumber = 5):
     self.fileNumber = 0
     self.DEBUG = False
-    self.DEBUG1 = True
+    self.DEBUG1 = False
     self.patchNumber = patchNumber
     self.working_images = [cv2.imread(imagePath) for imagePath in imagePaths]
     # allocate some extra array indices
@@ -360,6 +360,8 @@ class ImageStitching(object):
     self.fileNumber = self.calculateFilesNumber()
     self.preFileNumber = self.fileNumber
     if self.fileNumber%self.patchNumber != 0:
+      print self.fileNumber
+      print self.patchNumber
       raise Exception("The number of files cannot divided evenly by patchNumber")
     for i in range (int(self.preFileNumber/self.patchNumber)):
         end = int(((i+1)*self.patchNumber)/2)

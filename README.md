@@ -5,6 +5,7 @@ Project of constructing panorama view from several images for Computational Robo
 
 #Story line 1
 
+
 What’s pup! (This is where you say “not mutts”). This is James and Erika and we want to talk to you about a piece of the “Neato (Google) Street View” project: visualizing the google street view inside school campus. Our vision for the final product is to allow users to remotely visit our web interface and interact with our “Neato Google Street View”. 
     
 Besides Slam, this is the another big piece of the project and mainly has three sections. First, the panorama. In order to create a “2.5 D” view, we think creating a panorama view will be useful; Second, the data storage. We need places to store all the pictures and load them to web interface; Third, the web interface. 
@@ -63,3 +64,5 @@ After running countless tests and discussing with the professor, we started to t
 
 After previously failing many times in image stitching, we planned to start looking for other methods of making panorama. However after discussing with Genius Professor, Paul Ruvolo the Great, a passionate young man, Zhecan Wang in our team got inspired and found a new way of stitching images together which may solve all the problems. 
 
+##The New stitching method (two side stitching method)
+Diagram of how method works for 5 images

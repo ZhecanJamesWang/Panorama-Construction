@@ -3,6 +3,7 @@ import string
 import cv2
 import numpy as np
 from panoramaGenerator import ImageStitching
+from ConnectImagetoSqlite import Database
 
 
 def filename2number(filename):
@@ -24,7 +25,7 @@ def test_number2filename():
 
 # print test_number2filename()
 def get_center_degree(num_array):
-	return np.mean(num_array) 
+	return np.mean(num_array)
 
 def test_get_middle():
 	print "Expected 4: Got ", get_center_degree([0, 2, 4, 6, 8])
@@ -37,11 +38,11 @@ class SelectAndMerge(object):
 		self.pose_x = pose_x
 		self.pose_y = pose_y
 		self.raw_path = 'street_view_images/raw/{x},{y}'.format(x=pose_x, y=pose_y)
-		self.save_path = 'street_view_images/final/iter4' # remove hardcoding later
+		self.save_path = 'street_view_images/final/iter8' # remove hardcoding later
 		self.get_sorted_raw_int()
 		self.indexList = []
 		self.total = len(self.sorted_raw_int)
-		self.diff = 4
+		self.diff = 2
 		self.start_offset = 2
 		self.patchNumber = 5
 
@@ -95,12 +96,13 @@ class SelectAndMerge(object):
 	def run(self):
 			self.generatePatchBatches()
 			self.feedToStitching()
+			Database (self.save_path).run()
 
 			# if img != None:	
 			# 	cv2.imshow("test", img)
 	  #       	cv2.waitKey(5)
 	        
-sm = SelectAndMerge(0.0,0.0)
+sm = SelectAndMerge(0.0, -0.0)
 sm.run()
 # # merge
 # folderName = "street_view_images/working"
