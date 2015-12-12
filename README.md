@@ -3,7 +3,7 @@ Project of constructing panorama view from several images for Computational Robo
 
 
 
-#Story line 1
+#Panorama Image Stitching
 
 
 What’s pup! (This is where you say “not mutts”). This is James and Erika and we want to talk to you about a piece of the “Neato (Google) Street View” project: visualizing the google street view inside school campus. Our vision for the final product is to allow users to remotely visit our web interface and interact with our “Neato Google Street View”. 
@@ -59,9 +59,6 @@ As the photos above, from both methods, the because of the homography transfer, 
 After running countless tests and discussing with the professor, we started to think that image stitching to generate panoramas might not be the most effective way to capture a 360 degree shot on the neato. We’ve now identified other options and will be moving forward with testing these new ideas and then will move to finding the most efficient way of storing these panoramas.
 
 
-#Story Line 2
-
-
 After previously failing many times in image stitching, we planned to start looking for other methods of making panorama. However after discussing with Genius Professor, Paul Ruvolo the Great, a passionate young man, Zhecan Wang in our team got inspired and found a new way of stitching images together which may solve all the problems. 
 
 ##The New stitching method (two side stitching method)
@@ -81,3 +78,35 @@ After previously failing many times in image stitching, we planned to start look
 ##Some of the old stitching methods
 ![Image](https://github.com/ZhecanJamesWang/Panorama-Construction/blob/master/BlogImages/Screenshot%20from%202015-12-07%2023:51:12.png)
 [Figure 11: Diagram of two old stitching methods]
+
+
+Figure 6 and 7 are the failed examples of these two previous stitching methods
+
+
+#Workflow for Data Collection, Image Selection and Merging. 
+
+
+After successfully implementing the panorama image stitching part, we also need to figure out thw flow, how the robot actually collects photos and in which order the image should be stitched. 
+
+
+1. Collecting Panorama / Waypoints using the Neato
+	*Collecting 360 degree views with a ROS Node
+		-Number of photos taken in one cycle: 36 (The number is arbitrary specified as input)
+		-Take one photo every 10 degrees(in the case of 36 photos in one cycle)
+		-In order to get the widest range, we merge 5 pictures(patch number), which are 20 degrees (2 diff * 10 degrees) apart from each other. (The patch number is also arbitrary, we can merge 7 or even more photos at every view but 5 photos have stable performance result)
+
+2. Select Images and Merge(select_and_merge.py script)
+	*36 photos representing the 360 degree view for a particular waypoint are saved in a unique folder
+	*starting with an incremented phase offset, the algorithm picks a photo every 20 degree(the difference) and merge 5 photos for one panorama. 	
+	*the incremented starting phase and fixed difference allow us to merge photos in many different combinations of 5 photos
+	*Example of selecting photos for merging:
+		-[3,5,7,9,11]
+		-[6,8,10,12,14]
+		-…….
+		-In this example, the starting phase is 3 and the difference between photos in every combination is 2.
+
+
+
+
+
+
