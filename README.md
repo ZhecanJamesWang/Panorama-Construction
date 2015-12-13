@@ -14,7 +14,9 @@ In this blog post we will be touching on the panorama(image stitching) portion o
 The links for other parts are as followings:
 
 -[Data Collection(ROS)](https://github.com/ZhecanJamesWang/street_view_drive)
+
 -[Web Interface](https://github.com/skchandra/neato_street_view/tree/website)
+
 -[Slam Algorithm Implementation](https://github.com/youralien/hector_slam)
 
     
