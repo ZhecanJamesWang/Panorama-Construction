@@ -13,9 +13,9 @@ Besides implementing the Slam algorithm, this is the another big piece of the pr
 In this blog post we will be touching on the panorama(image stitching) portion of this project.
 The links for other parts are as followings:
 
-[Data Collection(ROS)](https://github.com/ZhecanJamesWang/street_view_drive)
-[Web Interface](https://github.com/skchandra/neato_street_view/tree/website)
-[Slam Algorithm](Implementation: https://github.com/youralien/hector_slam)
+-[Data Collection(ROS)](https://github.com/ZhecanJamesWang/street_view_drive)
+-[Web Interface](https://github.com/skchandra/neato_street_view/tree/website)
+-[Slam Algorithm Implementation](https://github.com/youralien/hector_slam)
 
     
 There are different kinds of panoramas varying with different angles of degrees. In our project, in order to visualise the map fully at specific waypoints we decided to first explore making 360 degree panoramas using the neato. Since we don’t have a 360 degree camera built into the neato, our plan is to take many pictures and then stitch them together to form a panorama. We would then upload slices of the panorama into a database to view on an interactive web platform.
@@ -104,19 +104,32 @@ After successfully implementing the panorama image stitching part, we also need 
 
 
 1. Collecting Panorama / Waypoints using the Neato
+
 	*Collecting 360 degree views with a ROS Node
+
 		-Number of photos taken in one cycle: 36 (The number is arbitrary specified as input)
+
 		-Take one photo every 10 degrees(in the case of 36 photos in one cycle)
+
 		-In order to get the widest range, we merge 5 pictures(patch number), which are 20 degrees (2 diff * 10 degrees) apart from each other. (The patch number is also arbitrary, we can merge 7 or even more photos at every view but 5 photos have stable performance result)
 
+
 2. Select Images and Merge(select_and_merge.py script)
+
 	*36 photos representing the 360 degree view for a particular waypoint are saved in a unique folder
+
 	*starting with an incremented phase offset, the algorithm picks a photo every 20 degree(the difference) and merge 5 photos for one panorama. 	
+
 	*the incremented starting phase and fixed difference allow us to merge photos in many different combinations of 5 photos
+
 	*Example of selecting photos for merging:
+
 		-[3,5,7,9,11]
+
 		-[6,8,10,12,14]
+
 		-…….
+
 		-In this example, the starting phase is 3 and the difference between photos in every combination is 2.
 
 
